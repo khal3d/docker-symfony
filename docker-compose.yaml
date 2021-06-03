@@ -1,0 +1,28 @@
+version: '3'
+services:
+    web:
+        container_name: ${PROJECT_NAME}-web
+        image: "symfony"
+        build:
+            context: ./php
+            dockerfile: Dockerfile
+        volumes:
+            - project-dir:/var/www/html
+        ports:
+            - ${HTTP_PORT}:80
+    mysql-db:
+        container_name: ${PROJECT_NAME}-mysql
+        image: mysql
+        volumes:
+            - mysql-data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: ${MYSQL_DB_PASSWORD}
+            MYSQL_DATABASE: ${PROJECT_NAME}
+volumes:
+    project-dir:
+        driver: local
+        driver_opts:
+            device: ${HOST_WORKING_DIR}
+            type: none
+            o: bind
+    mysql-data:
